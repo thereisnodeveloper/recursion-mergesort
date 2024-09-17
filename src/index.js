@@ -8,14 +8,41 @@ const testElement = document.createElement('div');
 
 // asumptions: array.length > 1
 
+function sortTwo(left, right) {
+  if (left <= right) return [left, right];
+  return [right, left];
+}
+
 function mergeSort(array) {
-  // split the array
-  // look at LEFT half
-  // if n=1, it's sorted, return
-  // look at the RIGHT half
-  // if n=1, it's sorted, return
-  const [leftHalf, rightHalf] = splitArray(array);
-  // merge(leftHalf,rightHalf);
+  let isSorted = false;
+  let result;
+  // BASE CASE
+
+  // case: array is just 1 number
+  if (array.length === 1) {
+    isSorted = true;
+    result = array;
+  }
+  if (isSorted) return result;
+
+  // case: array is 2 numbers
+  if (array.length === 2) {
+    const [leftHalf, rightHalf] = splitArray(array);
+    isSorted = true;
+    result = sortTwo(leftHalf, rightHalf);
+  }
+  if (isSorted) return result;
+
+  // RECURSIVE CASE
+  else
+   {
+    let [leftHalf, rightHalf] = splitArray(array);
+    leftHalf =  mergeSort(leftHalf); 
+    rightHalf = mergeSort(rightHalf)
+    result = merge(leftHalf,rightHalf)
+    return result
+  }
+
 }
 
 function merge(leftHalf, rightHalf, resultArray = []) {
@@ -50,9 +77,9 @@ function merge(leftHalf, rightHalf, resultArray = []) {
 
   return merge(leftHalf, rightHalf, resultArray);
 }
-console.log(merge([32, 1], [3, 5]));
 
 function splitArray(array) {
+  console.log('splitting array...')
   let halfWay;
   if (array.length % 2 === 0) {
     // is even
@@ -63,5 +90,10 @@ function splitArray(array) {
 
   const leftHalf = array.slice(0, halfWay);
   const rightHalf = array.slice(halfWay);
-  return [leftHalf, rightHalf];
+  const result = [leftHalf, rightHalf]
+  console.log('result:', result)
+  return result;
 }
+
+
+console.log( mergeSort([5,2,1,3,6,4]))
