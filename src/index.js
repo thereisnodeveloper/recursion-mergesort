@@ -6,7 +6,8 @@ import './style.css';
 const testElement = document.createElement('div');
 // #endregion
 
-// asumptions: array.length > 1
+// FIXME: final result array should consist only of integers, instead has array
+// of array in it
 
 function sortTwo(left, right) {
   if (left <= right) return [left, right];
@@ -27,25 +28,23 @@ function mergeSort(array) {
 
   // case: array is 2 numbers
   if (array.length === 2) {
-    const [leftHalf, rightHalf] = splitArray(array);
+    const [leftHalf, rightHalf] = splitArray(array, array.length);
     isSorted = true;
     result = sortTwo(leftHalf, rightHalf);
   }
   if (isSorted) return result;
 
   // RECURSIVE CASE
-  else
-   {
-    let [leftHalf, rightHalf] = splitArray(array);
-    leftHalf =  mergeSort(leftHalf); 
-    rightHalf = mergeSort(rightHalf)
-    result = merge(leftHalf,rightHalf)
-    return result
-  }
 
+  let [leftHalf, rightHalf] = splitArray(array);
+  leftHalf = mergeSort(leftHalf);
+  rightHalf = mergeSort(rightHalf);
+  result = merge(leftHalf, rightHalf);
+  return result;
 }
 
 function merge(leftHalf, rightHalf, resultArray = []) {
+  console.log('starting merge...');
   // const resultArray = [];
   // RECURSIVELY repeat process until both leftHalf and rightHalf are empty
 
@@ -78,8 +77,8 @@ function merge(leftHalf, rightHalf, resultArray = []) {
   return merge(leftHalf, rightHalf, resultArray);
 }
 
-function splitArray(array) {
-  console.log('splitting array...')
+function splitArray(array, arraylength = null) {
+  console.log('splitting array...');
   let halfWay;
   if (array.length % 2 === 0) {
     // is even
@@ -88,12 +87,16 @@ function splitArray(array) {
     halfWay = Math.floor(array.length / 2);
   }
 
-  const leftHalf = array.slice(0, halfWay);
-  const rightHalf = array.slice(halfWay);
-  const result = [leftHalf, rightHalf]
-  console.log('result:', result)
+  let leftHalf = array.slice(0, halfWay);
+  let rightHalf = array.slice(halfWay);
+
+  if (arraylength === 2) {
+    if (leftHalf.length === 1) leftHalf = leftHalf[0];
+    if (rightHalf.length === 1) rightHalf = rightHalf[0];
+  }
+  const result = [leftHalf, rightHalf];
+  console.log('split result:', result);
   return result;
 }
 
-
-console.log( mergeSort([5,2,1,3,6,4]))
+console.log(mergeSort([5,3]));
