@@ -13,17 +13,20 @@ function mergeSort(array) {
   // look at LEFT half
   // if n=1, it's sorted, return
   // look at the RIGHT half
+  // if n=1, it's sorted, return
+  const [leftHalf, rightHalf] = splitArray(array);
+  // merge(leftHalf,rightHalf);
 }
 
 function merge(leftHalf, rightHalf, resultArray = []) {
   // const resultArray = [];
-  // RECURSIVELY repeat process until both arrays are empty
+  // RECURSIVELY repeat process until both leftHalf and rightHalf are empty
+
   // BASE CASE: both arrays empty
   if (leftHalf.length + rightHalf.length === 0) return resultArray;
-
-  const leftHalfFirstElement = leftHalf[0] || null; // FIXME: dont shift unless you're sure number is smaller
+  const leftHalfFirstElement = leftHalf[0];
   console.log('leftHalfFirstElement:', leftHalfFirstElement);
-  const rightHalfFirstElement = rightHalf[0] || null;
+  const rightHalfFirstElement = rightHalf[0];
   console.log('rightHalfFirstElement:', rightHalfFirstElement);
 
   // if either is undefined (array.length ===0)
@@ -32,13 +35,13 @@ function merge(leftHalf, rightHalf, resultArray = []) {
   let smaller;
   smaller = leftHalfFirstElement <= rightHalfFirstElement ? 'left' : 'right';
 
-  // if either array is null, push the other one
-  if (leftHalfFirstElement === null) {
+  // if either array's first element is null, push the other one
+  if (leftHalfFirstElement === null || leftHalfFirstElement === undefined) {
     resultArray.push(rightHalf.shift());
-  } else if (rightHalfFirstElement === null) {
+  } else if (rightHalfFirstElement === null || rightHalfFirstElement === undefined) {
     resultArray.push(leftHalf.shift());
 
-    //if neither array is null, compare the values
+    // if neither array's first element is null, compare the values
   } else if (smaller === 'left') {
     resultArray.push(leftHalf.shift());
   } else {
@@ -47,61 +50,18 @@ function merge(leftHalf, rightHalf, resultArray = []) {
 
   return merge(leftHalf, rightHalf, resultArray);
 }
-// const result = merge([5], [2, 1]);
-// console.log('result:', result);
+console.log(merge([32, 1], [3, 5]));
 
-// function mergeSort(array) {
-//   // define half
+function splitArray(array) {
+  let halfWay;
+  if (array.length % 2 === 0) {
+    // is even
+    halfWay = array.length / 2;
+  } else {
+    halfWay = Math.floor(array.length / 2);
+  }
 
-//   // is array length even or odd?
-//   console.log('array:', array);
-
-//   let [leftHalf, rightHalf] = splitArray(array);
-//   console.log('leftHalf:', leftHalf);
-//   console.log('rightHalf:', rightHalf);
-//   // BASE CASE
-//   if (array.length === 2) {
-//     // unpack arrays before comparing, since these are single-item arrays
-//     [leftHalf] = [...leftHalf];
-//     [rightHalf] = [...rightHalf];
-
-//     // SORT
-//     if (leftHalf < rightHalf) {
-//       array[0] = leftHalf;
-//       array[1] = rightHalf;
-//     } else {
-//       array[1] = leftHalf;
-//       array[0] = rightHalf;
-//     }
-//     console.log(`array sorted:${array}`);
-//     return array;
-//   }
-
-//   if(array.length ===1){
-//     return array
-//   }
-
-//   // RECURSIVE CASE
-//   leftHalf = mergeSort(leftHalf);
-//   rightHalf = mergeSort(rightHalf);
-//   return [...leftHalf, ...rightHalf];
-// }
-
-// const testArray = [5, 2, 1, 3, 6, 4];
-
-// const result = mergeSort(testArray);
-// console.log('result:', result);
-
-// function splitArray(array) {
-//   let halfWay;
-//   if (array.length % 2 === 0) {
-//     // is even
-//     halfWay = array.length / 2;
-//   } else {
-//     halfWay = Math.floor(array.length / 2);
-//   }
-
-//   const leftHalf = array.slice(0, halfWay);
-//   const rightHalf = array.slice(halfWay);
-//   return [leftHalf, rightHalf];
-// }
+  const leftHalf = array.slice(0, halfWay);
+  const rightHalf = array.slice(halfWay);
+  return [leftHalf, rightHalf];
+}
